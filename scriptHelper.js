@@ -3,18 +3,20 @@
 require('cross-fetch/polyfill');
 
 function addDestinationInfo(document, name, diameter, star, distance, moons, imageUrl) {
-    // Here is the HTML formatting for our mission target div.
-    /*
-                 <h2>Mission Destination</h2>
-                 <ol>
-                     <li>Name: </li>
-                     <li>Diameter: </li>
-                     <li>Star: ${star}</li>
-                     <li>Distance from Earth: </li>
-                     <li>Number of Moons: </li>
-                 </ol>
-                 <img src="">
-    */
+    let missionTarget = document.getElementById("missionTarget");
+    let destinationInfo = (`<h2>Mission Destination</h2>
+        <ol>
+            <li>Name: ${name}</li>
+            <li>Diameter: ${diameter}</li>
+            <li>Star: ${star}</li>
+            <li>Distance from Earth: ${distance}</li>
+            <li>Number of Moons: ${moons}</li>
+        </ol>
+            <img src="${imageUrl}">`);
+
+    missionTarget.innerHTML = destinationInfo;
+
+   //somehow utilize the function myFetch here???????
  }
 
 function validateInput(testInput) {
@@ -36,7 +38,9 @@ function validateInput(testInput) {
     let copilotStatus = document.getElementById("copilotStatus");
     let fuelStatus = document.getElementById("fuelStatus");
     let cargoStatus = document.getElementById("cargoStatus");
-
+    let shuttleReady = true;
+   
+    
     if (validateInput(pilot) === "Empty"){
         alert("Pilot's name is required!");
         inputValidated = false;
@@ -64,10 +68,12 @@ function validateInput(testInput) {
         alert("Fuel level must be a number.")
         inputValidated = false;
     } else if (fuelLevel < 10000){
-        fuelStatus.innerHTML = "Fuel level too low for launch";
+        fuelStatus.innerHTML = fuelLevel;
+        // fuelStatus.innerHTML = "Fuel level too low for launch";
         list.style = "visibility: visible";
         h2.innerHTML = "Shuttle Not Ready for Launch";
         h2.style.color = "red";
+        shuttleReady = false;
     }
 
     if (validateInput(cargoLevel) === "Empty"){
@@ -79,31 +85,32 @@ function validateInput(testInput) {
     } else if (cargoLevel > 10000){
         cargoStatus.innerHTML = "Cargo mass too heavy for launch";
         list.style = "visibility: visible";
-        h2.innerHTML = "Shuttle Not Ready for Launch";
+        h2.innerHTML = "Shuttle Not Ready for Launch";    
         h2.style.color = "red";
+        shuttleReady = false;
     }
-    // when you need to change text on pilotStatus, you'll have to change the style to visible AND change the text with .innerHTML!
-    // for ex: pilotStatus = document.getElementById("pilotstatus"), then pilotstatus.innerHTML, etc etc 
 
-    // if (inputValidated){
-    // remember that this function is called here to complete tasks -- the actual submission of the form happens in script.js
-    //change text of launchStatus to green and display "Shuttle is ready for launch"
-    // }
-
-    
+    if (shuttleReady == true && inputValidated == true){
+        h2.innerHTML = "Shuttle is ready for launch";
+        h2.style.color = "green";
+    }
  }
  
 
  async function myFetch() {
      let planetsReturned;
- 
-     planetsReturned = await fetch().then( function(response) {
+     planetsReturned = await fetch('https://handlers.education.launchcode.org/static/planets.json').then( function(response) {
+        return response;
          });
- 
      return planetsReturned;
  }
  
  function pickPlanet(planets) {
+    //let planets = {};
+    let planetIndex = Math.floor(Math.random() * 5);
+   
+    // where random number generator will select planet from planetsReturned array; 
+    // return planet;
  }
  
  module.exports.addDestinationInfo = addDestinationInfo;
