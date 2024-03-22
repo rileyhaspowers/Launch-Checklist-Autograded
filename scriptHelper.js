@@ -15,8 +15,6 @@ function addDestinationInfo(document, name, diameter, star, distance, moons, ima
             <img src="${imageUrl}">`);
 
     missionTarget.innerHTML = destinationInfo;
-
-   //somehow utilize the function myFetch here???????
  }
 
 function validateInput(testInput) {
@@ -68,12 +66,13 @@ function validateInput(testInput) {
         alert("Fuel level must be a number.")
         inputValidated = false;
     } else if (fuelLevel < 10000){
-        fuelStatus.innerHTML = fuelLevel;
-        // fuelStatus.innerHTML = "Fuel level too low for launch";
+        fuelStatus.innerHTML = "Fuel level too low for launch";
         list.style = "visibility: visible";
         h2.innerHTML = "Shuttle Not Ready for Launch";
         h2.style.color = "red";
         shuttleReady = false;
+    }else {
+        fuelStatus.innerHTML = "Fuel level high enough for launch";
     }
 
     if (validateInput(cargoLevel) === "Empty"){
@@ -88,10 +87,12 @@ function validateInput(testInput) {
         h2.innerHTML = "Shuttle Not Ready for Launch";    
         h2.style.color = "red";
         shuttleReady = false;
+    }else {
+        cargoStatus.innerHTML = "Cargo mass low enough for launch";
     }
 
     if (shuttleReady == true && inputValidated == true){
-        h2.innerHTML = "Shuttle is ready for launch";
+        h2.innerHTML = "Shuttle is Ready for Launch";
         h2.style.color = "green";
     }
  }
@@ -100,17 +101,17 @@ function validateInput(testInput) {
  async function myFetch() {
      let planetsReturned;
      planetsReturned = await fetch('https://handlers.education.launchcode.org/static/planets.json').then( function(response) {
-        return response;
+        return response.json();
          });
      return planetsReturned;
  }
  
  function pickPlanet(planets) {
-    //let planets = {};
     let planetIndex = Math.floor(Math.random() * 5);
+    planetPicked = planets[planetIndex];
+    planetPicked
+    return planetPicked;
    
-    // where random number generator will select planet from planetsReturned array; 
-    // return planet;
  }
  
  module.exports.addDestinationInfo = addDestinationInfo;
